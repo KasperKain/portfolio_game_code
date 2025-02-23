@@ -1,0 +1,9 @@
+{
+  "path": "src/game/assets/images",
+  "files": [
+    { "type": "image", "key": "testOBJ", "url": "testOBJ.png" },
+    { "type": "image", "key": "testBG", "url": "testBG.png" },
+    { "type": "image", "key": "glow", "url": "glow.png" },
+    { "type": "image", "key": "click", "url": "click.png" }
+  ]
+}
