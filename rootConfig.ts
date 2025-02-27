@@ -1,8 +1,8 @@
 const options = {
   type: Phaser.CANVAS,
-  size: { x: 160, y: 240 },
+  size: { x: 160, y: 256 },
   gravity: { x: 0, y: 0 },
-  physicsDebug: true,
+  physicsDebug: false,
 };
 
 // Options above

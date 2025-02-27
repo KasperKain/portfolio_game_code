@@ -1,3 +1,5 @@
+// CURRENTLY NOT IMPLEMENTED / REMOVED FOR DEBUGGING REASONS
+
 export default class DialogueBox {
   protected scene: Phaser.Scene;
   protected size: { x: number; y: number };

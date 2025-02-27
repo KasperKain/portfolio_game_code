@@ -1,0 +1,44 @@
+[
+  {
+    "key": "playerIdleDown",
+    "frameRate": 5,
+    "frames": [0, 1],
+    "repeat": -1,
+    "assetKey": "player"
+  },
+  {
+    "key": "playerIdleSide",
+    "frameRate": 5,
+    "frames": [4, 5],
+    "repeat": -1,
+    "assetKey": "player"
+  },
+  {
+    "key": "playerIdleUp",
+    "frameRate": 5,
+    "frames": [2, 3],
+    "repeat": -1,
+    "assetKey": "player"
+  },
+  {
+    "key": "playerWalkDown",
+    "frameRate": 12,
+    "frames": [9, 10, 9, 11],
+    "repeat": -1,
+    "assetKey": "player"
+  },
+  {
+    "key": "playerWalkSide",
+    "frameRate": 12,
+    "frames": [15, 16, 15, 17],
+    "repeat": -1,
+    "assetKey": "player"
+  },
+  {
+    "key": "playerWalkUp",
+    "frameRate": 12,
+    "frames": [12, 13, 12, 14],
+    "repeat": -1,
+    "assetKey": "player"
+  }
+]

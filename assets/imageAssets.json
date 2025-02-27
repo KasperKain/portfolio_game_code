@@ -4,6 +4,24 @@
     { "type": "image", "key": "testOBJ", "url": "testOBJ.png" },
     { "type": "image", "key": "testBG", "url": "testBG.png" },
     { "type": "image", "key": "glow", "url": "glow.png" },
-    { "type": "image", "key": "click", "url": "click.png" }
+    { "type": "image", "key": "click", "url": "click.png" },
+
+    {
+      "type": "image",
+      "key": "backgroundTilemap",
+      "url": "backgroundTilemap.png"
+    },
+    {
+      "type": "image",
+      "key": "interactiveTilemap",
+      "url": "interactiveTilemap.png"
+    },
+
+    {
+      "type": "spritesheet",
+      "key": "player",
+      "url": "playerSpritesheet.png",
+      "frameConfig": { "frameWidth": 32, "frameHeight": 32 }
+    }
   ]
 }
