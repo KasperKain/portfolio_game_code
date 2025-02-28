@@ -1,12 +1,13 @@
 import debugInfo from "../global/debugInfo";
-import { DialogueBox } from "../ui/DialogueBox";
+import InputManager from "../managers/InputManager";
+import interactionManager from "../managers/interactionManager";
 import GameObject, { STATES } from "./GameObject";
 
 class Player extends GameObject {
   protected moveDelay: number = 200;
   protected prevPosition = { x: 0, y: 0 };
   protected lastDirection: string = "Down";
-
+  targetTile: any;
   constructor(
     scene: Phaser.Scene,
     position: { x: number; y: number },
@@ -17,24 +18,17 @@ class Player extends GameObject {
     this.setOrigin(0.25, 0.5);
   }
 
-  update(delta: number, dialogueBox: DialogueBox, isInteracting: boolean) {
-    this.checkIsWalking(dialogueBox, isInteracting);
+  update(delta: number) {
+    this.checkIsWalking();
   }
 
-  private checkIsWalking(dialogueBox: DialogueBox, isInteracting: boolean) {
+  private checkIsWalking() {
     if (this.state !== STATES.MOVING) return;
-
-    const reachedTarget =
-      this.x / 16 === this.targetTile.x && this.y / 16 === this.targetTile.y;
-
-    if (reachedTarget) {
-      this.handleMovementCompletion(dialogueBox, isInteracting);
-    }
   }
 
   moveTo(path: { x: number; y: number }[]) {
+    InputManager.clickLocked = true;
     if (this.state === STATES.MOVING) return;
-
     this.setState(STATES.MOVING);
     const validPath = this.getValidPath(path);
 
@@ -63,6 +57,11 @@ class Player extends GameObject {
 
   private followPath(path: { x: number; y: number }[], index = 0) {
     if (index >= path.length) {
+      InputManager.clickLocked = false;
+      if (interactionManager.interactionKey !== -1) {
+        interactionManager.beginInteraction();
+        interactionManager.interactionKey = -1;
+      }
       this.setState(STATES.IDLE);
       this.playAnimation("playerIdle", this.lastDirection);
       return;

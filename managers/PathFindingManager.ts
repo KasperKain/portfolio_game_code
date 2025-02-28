@@ -47,15 +47,6 @@ export default class PathfindingManager {
     const targetTile = this.interactiveLayer.getTileAt(end.x, end.y);
     this.scene.playerIsInteracting = false;
 
-    if (targetTile?.properties.interact) {
-      this.scene.playerIsInteracting = true;
-      const interactKey = targetTile.properties.interactKey;
-
-      if (interactKey !== undefined) {
-        end = this.findPreferTile(interactKey) || end;
-      }
-    }
-
     if (targetTile?.properties.collide) {
       end = this.findNearestWalkableTile(end) || end;
     }
@@ -71,21 +62,6 @@ export default class PathfindingManager {
     });
 
     this.finder.calculate();
-  }
-
-  private findPreferTile(interactKey: number) {
-    for (let y = 0; y < this.map.height; y++) {
-      for (let x = 0; x < this.map.width; x++) {
-        const tile = this.interactiveLayer.getTileAt(x, y);
-        if (
-          tile?.properties.prefer &&
-          tile.properties.interactKey === interactKey
-        ) {
-          return { x, y };
-        }
-      }
-    }
-    return null;
   }
 
   private findNearestWalkableTile(end: {

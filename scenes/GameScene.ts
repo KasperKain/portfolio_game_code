@@ -4,9 +4,12 @@ import PathfindingManager from "../managers/PathFindingManager";
 import UIEffects from "../ui/UIEffects";
 import DialogueBox from "../ui/DialogueBox";
 import Player from "../objects/Player";
+import StaticObject from "../objects/StaticObject";
+import interactionManager from "../managers/interactionManager";
 
 class GameScene extends Phaser.Scene {
   private player!: Player;
+  private closet!: StaticObject;
   private pathFindingManager!: PathfindingManager;
   private dialogueBox!: DialogueBox;
   private inputManager!: InputManager;
@@ -16,6 +19,14 @@ class GameScene extends Phaser.Scene {
   private interactiveLayer!: Phaser.Tilemaps.TilemapLayer;
   private objectLayer!: Phaser.Tilemaps.ObjectLayer;
   public playerIsInteracting: boolean = false;
+  buttonClickSound!:
+    | Phaser.Sound.NoAudioSound
+    | Phaser.Sound.HTML5AudioSound
+    | Phaser.Sound.WebAudioSound;
+  textPromptSound!:
+    | Phaser.Sound.NoAudioSound
+    | Phaser.Sound.HTML5AudioSound
+    | Phaser.Sound.WebAudioSound;
 
   constructor() {
     super({ key: "GameScene" });
@@ -26,6 +37,9 @@ class GameScene extends Phaser.Scene {
     this.initializeLayers();
     this.setupDebugToggle();
     this.initializeComponents();
+    console.log(StaticObject.staticObjects);
+    this.buttonClickSound = this.sound.add("click");
+    this.textPromptSound = this.sound.add("text");
   }
 
   private initializeMap() {
@@ -60,7 +74,6 @@ class GameScene extends Phaser.Scene {
     );
     this.objectLayer = this.map.getObjectLayer("Objects");
 
-    console.log(this.objectLayer);
     this.interactiveLayer.setVisible(false);
   }
 
@@ -69,18 +82,44 @@ class GameScene extends Phaser.Scene {
       debugInfo.hidden = !debugInfo.hidden;
       this.toggleLayerVisibility();
     });
+
+    this.input.keyboard?.on("keydown-G", () => {
+      this.dialogueBox.showDialogue(
+        "Hello world! This is a test",
+        this.textPromptSound
+      );
+    });
   }
 
   private toggleLayerVisibility() {
     this.interactiveLayer.setVisible(!this.interactiveLayer.visible);
     this.backgroundLayer.setVisible(!this.backgroundLayer.visible);
     this.objectLayer.visible = !this.objectLayer.visible;
+    this.closet.interact(() => {
+      console.log("doing a thing");
+    });
   }
 
   private initializeComponents() {
+    console.log(this);
     this.inputManager = new InputManager(this);
-    this.dialogueBox = new DialogueBox(this, { x: 100, y: 40 });
-    this.player = new Player(this, { x: 64, y: 64 }, "player");
+    this.dialogueBox = new DialogueBox(this, { x: 120, y: 50 });
+    this.player = new Player(this, { x: 5, y: 5 }, "player");
+    this.closet = new StaticObject(
+      this,
+      { x: 1, y: 10 },
+      "testOBJ",
+      "playerIdleDown",
+      "playerIdleUp"
+    );
+
+    this.closet2 = new StaticObject(
+      this,
+      { x: 2, y: 2 },
+      "testOBJ",
+      "playerIdleDown",
+      "playerIdleUp"
+    );
     this.player.playAnim("playerIdleDown");
     this.player.depth = 5;
     this.pathFindingManager = new PathfindingManager(
@@ -96,17 +135,20 @@ class GameScene extends Phaser.Scene {
     this.inputManager.update();
     this.player.update(delta, this.dialogueBox, this.playerIsInteracting);
     this.updateDebugInfo(delta);
+    this.closet.update();
   }
 
   private handlePlayerInteraction() {
+    let interactKey = -1;
     if (this.inputManager.getKey("clicked")) {
+      this.buttonClickSound.play();
       const pointer = this.input.activePointer;
       const tile = this.getTileFromPointer(pointer);
       const start = this.getPlayerTile();
 
       const clickedObject = this.getClickedObject(pointer);
       if (clickedObject) {
-        const interactKey = this.getInteractKey(clickedObject);
+        interactKey = this.getInteractKey(clickedObject);
         if (interactKey !== undefined) {
           const preferTile = this.findPreferTile(interactKey);
           if (preferTile) {
@@ -115,7 +157,7 @@ class GameScene extends Phaser.Scene {
           }
         }
       }
-
+      interactionManager.interactionKey = interactKey;
       this.pathFindingManager.startPathFinding(start, tile);
       this.uiEffects.showClickEffect(pointer.x, pointer.y);
     }

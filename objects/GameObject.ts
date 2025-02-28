@@ -14,7 +14,7 @@ export default class GameObject extends Phaser.GameObjects.Sprite {
     position: { x: number; y: number },
     textureKey: string
   ) {
-    super(scene, position.x, position.y, textureKey);
+    super(scene, position.x * 16, position.y * 16, textureKey);
     scene.add.existing(this);
     this.scale = 1;
     scene.physics.world.enable(this);

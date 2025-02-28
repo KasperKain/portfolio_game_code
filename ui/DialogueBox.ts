@@ -6,20 +6,22 @@ export default class DialogueBox {
   protected panel: Phaser.GameObjects.Rectangle;
   protected text: Phaser.GameObjects.Text;
   protected button: Phaser.GameObjects.Text;
+  protected isDisplayingText: boolean = false;
 
   constructor(scene: Phaser.Scene, size: { x: number; y: number }) {
     this.scene = scene;
     this.size = size;
+    this.text = "";
 
     this.panel = this.scene.add
       .rectangle(
         this.scene.cameras.main.width / 2,
         this.scene.cameras.main.height - this.size.y,
         this.size.x,
-        this.size.y,
+        this.size.y + 20,
         0x000000
       )
-      .setDepth(5)
+      .setDepth(10)
       .setVisible(false);
 
     this.text = this.scene.add
@@ -28,9 +30,10 @@ export default class DialogueBox {
         this.scene.cameras.main.height - this.size.y,
         "",
         {
+          fontFamily: "Courier New",
           fontSize: "11px",
           color: "#ffffff",
-          align: "center",
+          align: "left",
           wordWrap: { width: this.size.x - 20 },
         }
       )
@@ -41,7 +44,7 @@ export default class DialogueBox {
     this.button = this.scene.add
       .text(
         this.scene.cameras.main.width / 2,
-        this.scene.cameras.main.height - 80,
+        this.scene.cameras.main.height - 85,
         "OK",
         {
           fontSize: "13px",
@@ -52,7 +55,7 @@ export default class DialogueBox {
         }
       )
       .setOrigin(0.5)
-      .setDepth(6)
+      .setDepth(100)
       .setVisible(false)
       .setInteractive();
 
@@ -62,16 +65,42 @@ export default class DialogueBox {
     });
   }
 
-  showDialogue(dialogueText: string) {
-    this.text.setText(dialogueText);
-    this.panel.setVisible(true);
-    this.text.setVisible(true);
-    this.button.setVisible(true);
+  showDialogue(dialogueText: string, sound) {
+    //this.text.setText(dialogueText);
+    if (!this.isDisplayingText) {
+      this.isDisplayingText = true;
+      this.typewritePrompt(dialogueText, sound);
+      this.panel.setVisible(true);
+      this.text.setVisible(true);
+      //this.button.setVisible(true);
+    }
   }
 
   hideDialogue() {
+    this.text.setText("");
     this.panel.setVisible(false);
     this.text.setVisible(false);
     this.button.setVisible(false);
+  }
+
+  typewritePrompt(text, sound) {
+    let textTotal = "";
+    const charLength = text.length;
+    let i = 0;
+    this.scene.time.addEvent({
+      callback: () => {
+        sound.play();
+        textTotal += text[i];
+        this.text.setText(textTotal);
+        console.log("ok");
+        i++;
+        if (textTotal.length >= charLength) {
+          this.isDisplayingText = false;
+          this.button.setVisible(true);
+        }
+      },
+      repeat: charLength - 1,
+      delay: 80,
+    });
   }
 }

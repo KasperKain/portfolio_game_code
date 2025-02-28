@@ -1,0 +1,4 @@
+{
+  "path": "src/game/assets/audio",
+  "files": [{ "type": "audio", "key": "click", "url": "click.wav" }]
+}

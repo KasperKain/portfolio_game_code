@@ -1,4 +1,5 @@
 export default class InputManager {
+  public static clickLocked = false;
   private cursorKeys: {
     up: Phaser.Input.Keyboard.Key;
     down: Phaser.Input.Keyboard.Key;
@@ -17,7 +18,7 @@ export default class InputManager {
     this.cursorKeys = scene.input.keyboard!.createCursorKeys();
 
     scene.input.on("pointerdown", () => {
-      this.controls.clicked = true;
+      if (!InputManager.clickLocked) this.controls.clicked = true;
     });
   }
 

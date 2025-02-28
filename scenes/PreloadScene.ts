@@ -7,6 +7,8 @@ class PreloadScene extends Phaser.Scene {
     this.load.pack("asset_pack", "src/game/assets/imageAssets.json");
     this.load.json("animations_json", "src/game/assets/animations.json");
     this.load.tilemapTiledJSON("map", "src/game/assets/map.json");
+    this.load.audio("click", "src/game/assets/audio/click.wav");
+    this.load.audio("text", "src/game/assets/audio/text.wav");
   }
 
   create() {
