@@ -1,5 +1,7 @@
 export default class InputManager {
   public static clickLocked = false;
+
+  // currently unused
   private cursorKeys: {
     up: Phaser.Input.Keyboard.Key;
     down: Phaser.Input.Keyboard.Key;
@@ -11,6 +13,8 @@ export default class InputManager {
     downPressed: false,
     leftPressed: false,
     rightPressed: false,
+
+    // ----------------
     clicked: false,
   };
 

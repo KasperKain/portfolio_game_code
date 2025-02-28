@@ -5,7 +5,6 @@ export default class StaticObject extends GameObject {
   private lastState = this.state;
   private idleAnimKey!: string;
   private interactAnimKey!: string;
-  private key: number = 0;
   constructor(
     scene: Phaser.Scene,
     position = { x: 0, y: 0 },

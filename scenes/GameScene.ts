@@ -105,7 +105,7 @@ class GameScene extends Phaser.Scene {
     this.inputManager = new InputManager(this);
     this.dialogueBox = new DialogueBox(this, { x: 120, y: 50 });
     this.player = new Player(this, { x: 5, y: 5 }, "player");
-    this.closet = new StaticObject(
+    this.obj1 = new StaticObject(
       this,
       { x: 1, y: 10 },
       "testOBJ",
@@ -113,7 +113,7 @@ class GameScene extends Phaser.Scene {
       "playerIdleUp"
     );
 
-    this.closet2 = new StaticObject(
+    this.obj2 = new StaticObject(
       this,
       { x: 2, y: 2 },
       "testOBJ",
@@ -135,7 +135,7 @@ class GameScene extends Phaser.Scene {
     this.inputManager.update();
     this.player.update(delta, this.dialogueBox, this.playerIsInteracting);
     this.updateDebugInfo(delta);
-    this.closet.update();
+    this.obj1.update();
   }
 
   private handlePlayerInteraction() {
@@ -190,7 +190,7 @@ class GameScene extends Phaser.Scene {
   private getInteractKey(clickedObject: any) {
     const properties = clickedObject.properties;
     const interactKeyProperty = properties.find(
-      (prop) => prop.name === "interactKey"
+      (prop: { name: string }) => prop.name === "interactKey"
     );
     return interactKeyProperty ? interactKeyProperty.value : undefined;
   }
@@ -199,7 +199,7 @@ class GameScene extends Phaser.Scene {
     for (const object of this.objectLayer.objects) {
       const properties = object.properties;
       const interactKeyProperty = properties.find(
-        (prop) => prop.name === "interactKey"
+        (prop: { name: string }) => prop.name === "interactKey"
       );
       const preferProperty = properties.find((prop) => prop.name === "prefer");
 
